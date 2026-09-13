@@ -18,6 +18,7 @@ jobs:
         run: |
           cmake \
             -B build \
+            -D CMAKE_POLICY_VERSION_MINIMUM=3.5 \
             -D CMAKE_TOOLCHAIN_FILE=cmake/toolchain/ios.toolchain.cmake \
             -D ENABLE_BITCODE=0 \
             -D PLATFORM=OS64 \
