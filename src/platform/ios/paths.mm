@@ -86,9 +86,27 @@ bool iOSBootstrapGameData()
                 [documents stringByAppendingPathComponent:item];
 
             if (![fm fileExistsAtPath:source]) {
-                NSLog(@"FOCE bootstrap: missing %@", source);
-                return false;
-            }
+						    NSString* message = [NSString stringWithFormat:
+												        @"FOCE bootstrap missing:\n%@",
+													      source];
+
+						    UIAlertController* alert =
+						        [UIAlertController alertControllerWithTitle:@"Bootstrap Error"
+						                                            message:message
+								                                 preferredStyle:UIAlertControllerStyleAlert];
+
+						    [alert addAction:
+						        [UIAlertAction actionWithTitle:@"OK"
+						                                 style:UIAlertActionStyleDefault
+							                             handler:nil]];
+
+						    UIViewController* root =
+						        UIApplication.sharedApplication.keyWindow.rootViewController;
+
+						    [root presentViewController:alert animated:YES completion:nil];
+
+						    return false;
+						}
 
             // Remove a partial previous copy.
             if ([fm fileExistsAtPath:destination]) {
