@@ -2,6 +2,7 @@
 
 #include <Foundation/Foundation.h>
 #include <SDL.h>
+#import <UIKit/UIKit.h>
 
 // Modelled after SDL_AndroidGetExternalStoragePath.
 const char* iOSGetDocumentsPath()
