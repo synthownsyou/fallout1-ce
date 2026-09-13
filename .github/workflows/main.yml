@@ -1,0 +1,41 @@
+name: Build FOCE iOS
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  ios:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure iOS build
+        run: |
+          cmake \
+            -B build \
+            -D CMAKE_TOOLCHAIN_FILE=cmake/toolchain/ios.toolchain.cmake \
+            -D ENABLE_BITCODE=0 \
+            -D PLATFORM=OS64 \
+            -G Xcode \
+            -D CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=''
+
+      - name: Build iOS
+        run: |
+          cmake --build build --config RelWithDebInfo
+
+      - name: Package IPA
+        run: |
+          cd build
+          cpack -C RelWithDebInfo
+          ls -lah *.ipa
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: foce-ios
+          path: build/*.ipa
